@@ -1,18 +1,13 @@
-# Hardware PWM
-Now that you have done the software version of PWM, now it is time to start leveraging the other features of these Timer Modules.
+# Hardware PWM - MSP430G2553 & MSP430FR2311
+The files provided in this folder are **HardwarePWM1.c** and **HardwarePWM2.c** that both uses interrupts and timer modules to toggle an LED with an implement of a 1kHz PWM signal with a duty cycle between 0% and 100%, but in hardware. The MSP430G2553 c.file is named HardwarePWM1.c and the MSP430FR2311 c.file is named HardwarePWM2.c. 
 
-## Task
-You need to replicate the same behavior as in the software PWM, only using the Timer Modules ability to directly output to a GPIO Pin instead of managing them in software. One way to thing about what should happen is that unless your are doing some other things in your code, your system should initialize, set the Timer Modules, and then turn off the CPU.
+### MSP430G2553 Hardware PWM
+**Description** : The purpose of this lab is to utilize the MSP430G2553 and create a program to effectively implement a a 1kHz PWM signal with a duty cycle between 0% and 100%. The PWM should control the state of an LED at a 50% duty cycle. Upon pressing one of buttons, the duty cycle of the LED should increase by 10%. Once the LED reaches 100%, the duty cycle should go back to 0% on the next button press. There is also an implement of an other LED to light up when the Duty Cycle button is depressed and turns back off when it is let go. This program is implemented as hardware PWM which requires the use of the OUTMOD hardware feature. The OUTMOD7 is used to allow a reset/set functionality. By setting OUTMOD7 to CCR1, the microprocessor will carry out the functions implemented in the software PWM. The CCR1 register will count up to its value, trigger a reset, and then toggle once the value in CCR0 is reached. Essentially, the two registers are compared through the OUTMOD7 hardware functionality.
 
-## Deliverables
-You will need to have two folders in this repository, one for each of the processors that you used for this part of the lab. Remember to replace this README with your own.
+### MSP430FR2311 Hardware PWM
+**Description** : The purpose of this lab is to utilize the MSP430FR2331 and create a program to effectively implement a a 1kHz PWM signal with a duty cycle between 0% and 100%. The PWM should control the state of an LED at a 50% duty cycle. Upon pressing one of buttons, the duty cycle of the LED should increase by 10%. Once the LED reaches 100%, the duty cycle should go back to 0% on the next button press. There is also an implement of an other LED to light up when the Duty Cycle button is depressed and turns back off when it is let go. This program is implemented as hardware PWM which requires the use of the OUTMOD hardware feature. The OUTMOD7 is used to allow a reset/set functionality. By setting OUTMOD7 to CCR1, the microprocessor will carry out the functions implemented in the software PWM. The CCR1 register will count up to its value, trigger a reset, and then toggle once the value in CCR0 is reached. Essentially, the two registers are compared through the OUTMOD7 hardware functionality. This program is similar to the MSP4302553 but it differs from ports and pins.
 
-### Hints
-Read up on the P1SEL registers as well as look at the Timer modules ability to multiplex.
+### Watchdog Timers
+Both are set to have their watchdog timers off so that the controllers do not reset everytime when they're using interrupts. In fact, watchdog timers keeps track of any abnormal behavior from the program. If the program fails and it "crashes," then the watchdog timer will trigger a reset and force the program back to the beginning. This needs to be disable so that the function of the code works.
 
-## Extra Work
-### Using ACLK
-Some of these microprocessors have a built in ACLK which is extremely slow compared to your up to 25MHz available on some of them. What is the overall impact on the system when using this clock? Can you actually use your PWM code with a clock that slow?
-
-### Ultra Low Power
-Using a combination of ACLK, Low Power Modes, and any other means you may deem necessary, optimize this PWM code to run at 50% duty cycle with a LED on the MSP430FR5994. In particular, time how long your code can run on the fully charged super capacitor. You do not need to worry about the button control in this case, and you will probably want to disable all the GPIO that you are not using (nudge, nudge, hint, hint).
+**Regard Unlocking Pins** : In the FR series boards, the GPIO pins must be unlock using a specfic line of code contained in the file. This line of code helps from disconnecting the output pins from the board and helps with power consumption. 
