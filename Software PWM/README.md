@@ -1,4 +1,4 @@
-# Software Debouncing - MSP430G2553 & MSP430F5529LP
+# Software PWM - MSP430G2553 & MSP430F5529LP
 The files provided in this folder are **SoftwarePWM1.c** and **SoftwarePWM2.c** that both uses interrupts and timer modules to toggle an LED with an implement of a 1kHz PWM signal with a duty cycle between 0% and 100%. The MSP430G2553 c.file is named SoftwarePWM1.c and the MSP430F5529LP c.file is named SoftwarePWM2.c. 
 
 ### MSP430G2553 Software PWM
