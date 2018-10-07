@@ -1,33 +1,11 @@
-# Software PWM
-Most microprocessors will have a Timer module, but depending on the device, some may not come with pre-built PWM modules. Instead, you may have to utilize software techniques to synthesize PWM on your own.
+# Software Debouncing - MSP430G2553 & MSP432P401R
+The files provided in this folder are **debouncing1.c** and **debouncing2.c** that both uses interrupts and timer modules to toggle an LED with an implement of a debounced switch control. The MSP430G2553 c.file is named debouncing1.c and the MSP432P401R c.file is named debouncing2.c. 
 
-## Task
-You need to generate a 1kHz PWM signal with a duty cycle between 0% and 100%. Upon the processor starting up, you should PWM one of the on-board LEDs at a 50% duty cycle. Upon pressing one of the on-board buttons, the duty cycle of the LED should increase by 10%. Once you have reached 100%, your duty cycle should go back to 0% on the next button press. You also need to implement the other LED to light up when the Duty Cycle button is depressed and turns back off when it is let go. This is to help you figure out if the button has triggered multiple interrupts.
+### MSP430G2553 Software Debouncing
+**Description** : The purpose of this lab is to utilize the MSP430G2553 and create a program to effectively implement a debounced switch control on the state of an LED. This program uses timer modules and interrupts to manage the debouncing in the background.The Port1 interrupt is called when it detects a falling edge on the pin connected to the switch P1.3. This begins the Timer0 and every 1 ms, the timer gives an interrupt, and the switch is read. If the switch remains in the same state for 10 checks in a row, then the state of the switch can toggle the LED on P1.0. Finally, the whole process is then repeated for the next switch bounce and the timer with the interrupt flag gets reset.
 
-## Deliverables
-You will need to have two folders in this repository, one for each of the processors that you used for this part of the lab. Remember to replace this README with your own.
+### MSP432P401R Software Debouncing
+**Description** : The purpose of this lab is to utilize the MSP432P401R and create a program to effectively implement a debounced switch control on the state of an LED. This program uses timer modules and interrupts to manage the debouncing in the background.The Port1 interrupt is called when it detects a falling edge on the pin connected to the switch P1.1. This begins the Timer0 and every 1 ms, the timer gives an interrupt, and the switch is read. If the switch remains in the same state for 10 checks in a row, then the state of the switch can toggle the LED on P2.2. Finally, the whole process is then repeated for the next switch bounce and the timer with the interrupt flag gets reset.
 
-### Hints
-You really, really, really, really need to hook up the output of your LED pin to an oscilloscope to make sure that the duty cycle is accurate. Also, since you are going to be doing a lot of initialization, it would be helpful for all persons involved if you created your main function like:
-
-```c
-int main(void)
-{
-	WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
-	LEDSetup(); // Initialize our LEDS
-	ButtonSetup();  // Initialize our button
-	TimerA0Setup(); // Initialize Timer0
-	TimerA1Setup(); // Initialize Timer1
-	__bis_SR_register(LPM0_bits + GIE);       // Enter LPM0 w/ interrupt
-}
-```
-
-This way, each of the steps in initialization can be isolated for easier understanding and debugging.
-
-
-## Extra Work
-### Linear Brightness
-Much like every other things with humans, not everything we interact with we perceive as linear. For senses such as sight or hearing, certain features such as volume or brightness have a logarithmic relationship with our senses. Instead of just incrementing by 10%, try making the brightness appear to change linearly.
-
-### Power Comparison
-Since you are effectively turning the LED off for some period of time, it should follow that the amount of power you are using over time should be less. Using Energy Trace, compare the power consumption of the different duty cycles. What happens if you use the pre-divider in the timer module for the PWM (does it consume less power)?
+### Watchdog Timers
+Both are set to have their watchdog timers off so that the controllers do not reset everytime when they're using interrupts. In fact, watchdog timers keeps track of any abnormal behavior from the program. If the program fails and it "crashes," then the watchdog timer will trigger a reset and force the program back to the beginning. This needs to be disable so that the function of the code works.
