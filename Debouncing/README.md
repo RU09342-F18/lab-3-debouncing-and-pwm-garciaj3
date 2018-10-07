@@ -1,18 +1,11 @@
-# Software Debouncing
-In previous labs, we talked about how objects such as switches can cause some nasty effects since they are actually a mechanical system at heart. We talked about the simple hardware method of debouncing, but due to the many different design constraints, you may not be able to add or adjust hardware. Debouncing is also only one of many applications which would require the use of built in Timers to allow for other processes to take place.
+# Software Debouncing - MSP430G2553 & MSP432P401R
+The files provided in this folder are **debouncing1.c** and **debouncing2.c** that both uses interrupts and timer modules to toggle an LED with an implement of a debounced switch control. The MSP430G2553 c.file is named debouncing1.c and the MSP432P401R c.file is named debouncing2.c. 
 
-## Task
-You need to utilize the TIMER modules within the MSP430 processors to implement a debounced switch to control the state of an LED. You most likely will want to hook up your buttons on the development boards to an oscilloscope to see how much time it takes for the buttons to settle. The idea here is that your processor should be able to run other code, while relying on timers and interrupts to manage the debouncing in the background. *You should not be using polling techniques for this assignment.*
+### MSP430G2553 Software Debouncing
+**Description** : The purpose of this lab is to utilize the MSP430G2553 and create a program to effectively implement a debounced switch control on the state of an LED. This program uses timer modules and interrupts to manage the debouncing in the background.The Port1 interrupt is called when it detects a falling edge on the pin connected to the switch P1.3. This begins the Timer0 and every 1 ms, the timer gives an interrupt, and the switch is read. If the switch remains in the same state for 10 checks in a row, then the state of the switch can toggle the LED on P1.0. Finally, the whole process is then repeated for the next switch bounce and the timer with the interrupt flag gets reset.
 
-## Deliverables
-You will need to have two folders in this repository, one for each of the processors that you used for this part of the lab. Remember to replace this README with your own.
+### MSP432P401R Software Debouncing
+**Description** : The purpose of this lab is to utilize the MSP432P401R and create a program to effectively implement a debounced switch control on the state of an LED. This program uses timer modules and interrupts to manage the debouncing in the background.The Port1 interrupt is called when it detects a falling edge on the pin connected to the switch P1.1. This begins the Timer0 and every 1 ms, the timer gives an interrupt, and the switch is read. If the switch remains in the same state for 10 checks in a row, then the state of the switch can toggle the LED on P2.2. Finally, the whole process is then repeated for the next switch bounce and the timer with the interrupt flag gets reset.
 
-### Hints
-You need to take a look at how the P1IE and P1IES registers work and how to control them within an interrupt routine. Remember that the debouncing is not going to be the main process you are going to run by the end of the lab.
-
-## Extra Work
-### Low Power Modes
-Go into the datasheets or look online for information about the low power modes of your processors and using Energy Trace, see what the lowest power consumption you can achieve while still running your debouncing code. Take a note when your processor is not driving the LED (or unplug the header connecting the LED and check) but running the interrupt routine for your debouncing.
-
-### Double the fun
-Can you expand your code to debounce two switches? Do you have to use two Timer peripherals to do this?
+### Watchdog Timers
+Both are set to have their watchdog timers off so that the controllers do not reset everytime when they're using interrupts. In fact, watchdog timers keeps track of any abnormal behavior from the program. If the program fails and it "crashes," then the watchdog timer will trigger a reset and force the program back to the beginning. This needs to be disable so that the function of the code works.
